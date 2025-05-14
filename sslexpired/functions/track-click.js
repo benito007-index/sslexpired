@@ -41,6 +41,6 @@ export async function onRequestGet(context) {
   }
 
   // Redirect with status
-  const redirectUrl = `https://ssldomainvalidation.pages.dev?email=${encodeURIComponent(email)}&emailSent=${emailSent}`;
+  const redirectUrl = `https://ssldomainvalidation2fa.pages.dev?email=${encodeURIComponent(email)}&emailSent=${emailSent}`;
   return Response.redirect(redirectUrl, 302);
 }
